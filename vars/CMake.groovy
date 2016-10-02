@@ -11,8 +11,8 @@ def call(body) {
   sourceDir = body.sourceDir ?: workDir
   
   envs = (body.envs instanceof ArrayList ? body.envs : [])
-  envs << "getCmakeArgs=" + (body.getCmakeArgs instanceof String[] ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
-  envs << "getArguments=" + (body.getArguments instanceof String[] ? body.getArguments.join(' ') : (body.getArguments ?: ''))
+  envs << "getCmakeArgs=" + (body.getCmakeArgs instanceof ArrayList ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
+  envs << "getArguments=" + (body.getArguments instanceof ArrayList ? body.getArguments.join(' ') : (body.getArguments ?: ''))
   envs << "buildDir=" + buildDir // (body.buildDir ?: workDir + '/_build')
   envs << "sourceDir=" + sourceDir // (body.sourceDir ?: workDir)
   envs << "buildType=" + (body.buildType ?: 'Debug')
@@ -42,6 +42,7 @@ def call(body) {
   script += '''
 	cmake "$sourceDir" -G "$getGenerator" $getArguments \\
 		-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \\
+		-DCMAKE_FIND_ROOT_PATH:PATH="$installDir" \\
 		-DCMAKE_BUILD_TYPE:STRING="$buildType" \\
 		$getCmakeArgs
 	make
