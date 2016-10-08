@@ -1,12 +1,12 @@
 #!groovy
 
 // vars/labelsToNodes.groovy
-def build(body) {
+def doit(body) {
   def nodesMap = [:]
-  def component = body.component
-  def labels = body.labels
+  // def component = body.component
+  // def labels = body.labels
   for (x in labels) {
-    def label = x
+    // def label = x
     // nodesMap[label] = {
     //   node(label) {
     // 	//unstash 'source'
