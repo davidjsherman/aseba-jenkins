@@ -3,7 +3,8 @@
 // vars/labelsToNodes.groovy
 def build(body) {
   def nodesMap = [:]
-  for (label in body.labels) {
+  for (x in body.labels) {
+    def label = x
     nodesMap[label] = {
       node(label) {
 	unstash 'source'
@@ -19,6 +20,6 @@ def build(body) {
       }
     }
   }
-  //println(nodesMap);
+  println(nodesMap);
   return nodesMap;
 }
