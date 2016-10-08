@@ -5,12 +5,13 @@ def build(body) {
   def nodesMap = [:]
   for (x in body.labels) {
     def label = x
+    def component = body.component
     nodesMap[label] = {
       node(label) {
-	unstash 'source'
+	//unstash 'source'
 	CMake([buildType: 'Debug',
-	       sourceDir: '$workDir/' + body.component,
-	       buildDir: '$workDir/_build/' + body.component + '/' + label,
+	       sourceDir: '$workDir/' + component,
+	       buildDir: '$workDir/_build/' + component + '/' + label,
 	       installDir: '$workDir/_install/' + label,
 	       getCmakeArgs: [ '-DBUILD_SHARED_LIBS:BOOL=ON' ]
 	      ])
