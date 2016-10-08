@@ -13,6 +13,7 @@ def call(body) {
   newbody.sourceDir = '$workDir/' + component
   newbody.buildDir = '$workDir/_build/' + component + '/' + label
   newbody.installDir = '$workDir/_install/' + label
+  newbody.getCmakeArgs = newbody.getCmakeArgs ?: []
   newbody.getCmakeArgs.push( '-DBUILD_SHARED_LIBS:BOOL=ON' )
 
   node(label) {
