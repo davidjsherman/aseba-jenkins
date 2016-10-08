@@ -7,8 +7,8 @@ def call(body) {
   def label = body.label ?: 'master'
 
   def newbody = body
-  newbody.remove('component')
-  newbody.remove('label')
+  //newbody.remove('component')
+  //newbody.remove('label')
 
   newbody.sourceDir = '$workDir/' + component
   newbody.buildDir = '$workDir/_build/' + component + '/' + label
