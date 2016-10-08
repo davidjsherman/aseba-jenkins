@@ -3,14 +3,14 @@
 // vars/labelsToNodes.groovy
 def build(body) {
   def nodesMap = [:]
-  for (label in labels) {
+  for (label in body.labels) {
     nodesMap[label] = {
       node(label) {
 	unstash 'source'
 	CMake([buildType: 'Debug',
-	       sourceDir: '$workDir/'+body.component,
-	       buildDir: '$workDir/_build/'+body.component+'/'+body.label,
-	       installDir: '$workDir/_install/'+body.label,
+	       sourceDir: '$workDir/' + body.component,
+	       buildDir: '$workDir/_build/' + body.component + '/' + label,
+	       installDir: '$workDir/_install/' + label,
 	       getCmakeArgs: [ '-DBUILD_SHARED_LIBS:BOOL=ON' ]
 	      ])
 	script {
