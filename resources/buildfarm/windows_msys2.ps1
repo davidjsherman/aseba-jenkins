@@ -111,7 +111,8 @@ net start sshd
         Write-Verbose "Creating directory $msyspath\home\Administrator\.ssh"
         New-Item -Type Directory -Path "$msyspath\home\Administrator\.ssh" -Force
     }
-    (new-object net.webclient).DownloadFile("http://sophia.e.ip.saba.us/julia_rsa.pub", "$msyspath\home\Administrator\.ssh\authorized_keys" )
+##    Replace this line to pre-install an ssh public key
+##    (new-object net.webclient).DownloadFile("https://raw.githubusercontent.com/davidjsherman/aseba-jenkins/1-buildfarm/resources/buildfarm/jenkins_rsa.pub", "$msyspath\home\Administrator\.ssh\authorized_keys" )
 
     Write-Verbose "chown'ing authorized_keys"
     &$msyspath\usr\bin\bash -lc @'
