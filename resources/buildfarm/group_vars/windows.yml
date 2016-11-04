@@ -1,0 +1,4 @@
+ansible_user: ci
+ansible_password: ci
+ansible_port: 5986
+ansible_connection: winrm

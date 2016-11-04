@@ -1,0 +1,4 @@
+# Aseba build farm on Jenkins
+- include: ubuntu.yml
+- include: macos.yml
+- include: windows.yml
