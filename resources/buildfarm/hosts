@@ -8,4 +8,4 @@ inirobot-ubuntu.ci
 inirobot-macos.ci
 
 [ci-windows]
-inirobot-windows.ci
+127.0.0.1
