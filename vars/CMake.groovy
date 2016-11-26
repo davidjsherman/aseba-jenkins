@@ -42,6 +42,7 @@ def call(body) {
   script += '''
 	cmake "$sourceDir" -G "$getGenerator" $getArguments \\
 		-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \\
+		-DPYTHON_CUSTOM_TARGET:PATH="$installDir/".$(python -c "import sys; print 'lib/python'+str(sys.version_info[0])+'.'+str(sys.version_info[1])+'/dist-packages'") \\
 		-DCMAKE_FIND_ROOT_PATH:PATH="$installDir" \\
 		-DCMAKE_BUILD_TYPE:STRING="$buildType" \\
 		$getCmakeArgs
