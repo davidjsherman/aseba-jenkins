@@ -14,6 +14,10 @@
         - libqwt5-qt4
         - libqwt5-qt4-dev
         - valgrind
+        - devscripts
+        - build-essential
+        - lintian
+        - libboost-python-dev
         - nodejs
 
     - name: Update all packages to the latest version
