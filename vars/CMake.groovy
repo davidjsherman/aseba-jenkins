@@ -7,16 +7,16 @@ def call(body) {
   workDir = pwd()
 
   cleanBuild = body.cleanBuild ?: true
-  buildDir = body.buildDir ?: workDir + '/_build'
+  buildDir = body.buildDir ?: workDir + '/build'
   sourceDir = body.sourceDir ?: workDir
   
   envs = (body.envs instanceof ArrayList ? body.envs : [])
   envs << "getCmakeArgs=" + (body.getCmakeArgs instanceof ArrayList ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
   envs << "getArguments=" + (body.getArguments instanceof ArrayList ? body.getArguments.join(' ') : (body.getArguments ?: ''))
-  envs << "buildDir=" + buildDir // (body.buildDir ?: workDir + '/_build')
+  envs << "buildDir=" + buildDir // (body.buildDir ?: workDir + '/build')
   envs << "sourceDir=" + sourceDir // (body.sourceDir ?: workDir)
   envs << "buildType=" + (body.buildType ?: 'Debug')
-  envs << "installDir=" + (body.installDir ?: workdir + '/_install')
+  envs << "installDir=" + (body.installDir ?: workdir + '/dist')
   envs << "getGenerator=" + (body.getGenerator ?: 'Unix Makefiles')
   envs << "workDir=" + (workDir)
 
@@ -42,7 +42,7 @@ def call(body) {
   script += '''
 	cmake "$sourceDir" -G "$getGenerator" $getArguments \\
 		-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \\
-		-DPYTHON_CUSTOM_TARGET:PATH="$installDir/".$(python -c "import sys; print 'lib/python'+str(sys.version_info[0])+'.'+str(sys.version_info[1])+'/dist-packages'") \\
+		-DPYTHON_CUSTOM_TARGET:PATH="$installDir/"$(python -c "import sys; print 'lib/python'+str(sys.version_info[0])+'.'+str(sys.version_info[1])+'/dist-packages'") \\
 		-DCMAKE_FIND_ROOT_PATH:PATH="$installDir" \\
 		-DCMAKE_BUILD_TYPE:STRING="$buildType" \\
 		$getCmakeArgs
