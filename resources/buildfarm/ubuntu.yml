@@ -1,0 +1,25 @@
+# Playbook for Debian and Ubuntu hosts
+# Install packages using Ansible's apt module
+
+- hosts: ci-ubuntu
+  tasks:
+    - name: Install dependencies
+      apt: pkg={{item}} state=installed update_cache=true
+      with_items:
+        - git
+        - cmake
+        - gcc
+        - g++
+        - qt4-dev-tools
+        - libqwt5-qt4
+        - libqwt5-qt4-dev
+        - valgrind
+        - devscripts
+        - build-essential
+        - lintian
+        - libboost-python-dev
+        - nodejs
+
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
