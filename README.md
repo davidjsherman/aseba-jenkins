@@ -3,12 +3,12 @@ Support for building Aseba components in Jenkins 2.
 
 ## Global Library
 If this repository is declared as a [Jenkins global library](https://github.com/jenkinsci/workflow-cps-global-lib-plugin/blob/master/README.md), it will provide a pipeline step function **CMake** that will configure, make, and install a package. The function accepts the following arguments:
-* `sourceDir=" (default: workDir)
+* `sourceDir=` (default: workDir)
 * `getGenerator` (default: 'Unix Makefiles')
 * `buildType` (default: 'Debug')
 * `buildDir` (default: workDir + '/build')
 * `installDir` (default: workdir + '/dist')
-* `getCmakeArgs` — additional CMake arguments, list or single string (no default)
+* `getCmakeArgs`: additional CMake arguments, list or single string (no default)
 
 ## Resources
 

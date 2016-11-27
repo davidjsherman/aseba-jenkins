@@ -27,7 +27,7 @@ Build the image in the usual way:
 ```
 docker build docker -t aseba/jenkins
 ```
-It is probably most useful to run the image with a persistent volume for `/var/jenkins_home`. To run the image storing the volume in the directory `jenkins`, use:
+It is probably most useful to run the image with a persistent volume for `/var/jenkins_home`. To store the volume in the directory `jenkins`, run using:
 ```
 docker run -d -p 49001:8080 -v $PWD/jenkins:/var/jenkins_home:z -t aseba/jenkins
 ```
