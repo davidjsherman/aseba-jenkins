@@ -20,6 +20,8 @@ def call(body) {
 	envs << "buildType=" + (body.buildType ?: 'Debug')
 	envs << "installDir=" + (body.installDir ?: workdir + '/dist')
 	envs << "getGenerator=" + (body.getGenerator ?: 'Unix Makefiles')
+	envs << "makeInvocation=" + (body.makeInvocation ?: 'make')
+	envs << "makeInstallInvocation=" + (body.makeInstallInvocation ?: 'make install')
 	envs << "workDir=" + (workDir)
 	
 	preloadScript = (body.preloadScript instanceof ArrayList ? body.preloadScript.join(" ") : body.preloadScript) ?: ''
@@ -48,8 +50,8 @@ def call(body) {
 		-DCMAKE_FIND_ROOT_PATH:PATH="$installDir" \
 		-DCMAKE_BUILD_TYPE:STRING="$buildType" \
 		$getCmakeArgs
-	make
-	make install
+	$makeInvocation
+	$makeInstallInvocation
 	'''.stripIndent()
 	
 	withEnv(envs) {
