@@ -13,6 +13,8 @@ def call(body) {
 	sourceDir = body.sourceDir ?: workDir
 	
 	envs = (body.envs instanceof ArrayList ? body.envs : [])
+	println(body.envs.getClass())
+	println(body.envs)
 	envs << "getCmakeArgs=" + (body.getCmakeArgs instanceof ArrayList ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
 	envs << "getArguments=" + (body.getArguments instanceof ArrayList ? body.getArguments.join(' ') : (body.getArguments ?: ''))
 	envs << "buildDir=" + buildDir + (body.label ? '/'+body.label : '')
@@ -27,7 +29,8 @@ def call(body) {
 	preloadScript = (body.preloadScript instanceof ArrayList ? body.preloadScript.join(" ") : body.preloadScript) ?: ''
 	
 	script = new String('''#!/bin/bash -l
-	echo -e run CMake with parameters: "\\n"workDir = ${workDir}"\\n"getArguments = ${getArguments}"\\n"buildDir = ${buildDir}"\\n"sourceDir = ${sourceDir}"\\n"getGenerator = ${getGenerator}"\\n"preloadScript = ${preloadScript}"\\n"buildType = ${buildType}"\\n"getCmakeArgs = ${getCmakeArgs}
+	echo -e run CMake with parameters: "\\n"workDir = ${workDir}"\\n"getArguments = ${getArguments}"\\n"buildDir = ${buildDir}"\\n"installDir = ${installDir}"\\n"sourceDir = ${sourceDir}"\\n"getGenerator = ${getGenerator}"\\n"preloadScript = ${preloadScript}"\\n"buildType = ${buildType}"\\n"getCmakeArgs = ${getCmakeArgs}
+set
 '''.stripIndent())
 	
 	if (cleanBuild && buildDir != sourceDir) {
