@@ -16,9 +16,9 @@ def call(body) {
 	envs << "getCmakeArgs=" + (body.getCmakeArgs instanceof ArrayList ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
 	envs << "getArguments=" + (body.getArguments instanceof ArrayList ? body.getArguments.join(' ') : (body.getArguments ?: ''))
 	envs << "buildDir=" + buildDir + (body.label ? '/'+body.label : '')
-	envs << "sourceDir=" + sourceDir // (body.sourceDir ?: workDir)
+	envs << "sourceDir=" + sourceDir
 	envs << "buildType=" + (body.buildType ?: 'Debug')
-	envs << "installDir=" + (body.installDir ?: workdir + '/dist') + (body.label ? '/'+body.label : '')
+	envs << "installDir=" + (body.installDir ?: workDir + '/dist') + (body.label ? '/'+body.label : '')
 	envs << "getGenerator=" + (body.getGenerator ?: 'Unix Makefiles')
 	envs << "makeInvocation=" + (body.makeInvocation ?: 'make')
 	envs << "makeInstallInvocation=" + (body.makeInstallInvocation ?: 'make install')
