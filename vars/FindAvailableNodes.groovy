@@ -4,7 +4,7 @@
 // Find which nodes are available for multi-OS builds
 
 def call(args) {
-	
+
 	candidates = args ?: [ 'debian', 'windows', 'macos' ]
 
 	def labels = [];

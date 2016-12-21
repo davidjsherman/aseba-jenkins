@@ -11,6 +11,7 @@ If this repository is declared as a [Jenkins global library](https://github.com/
 * `makeInvocation` (default: 'make')
 * `makeInstallInvocation` (default: 'make install')
 * `getCmakeArgs`: additional CMake arguments, list or single string (no default)
+* `label=` optional subdirectory to append to `buildDir` and `installDir`
 
 This function is a stopgap, waiting for the [official CMake plugin](https://wiki.jenkins-ci.org/display/JENKINS/CMake+Plugin) to catch up with Jenkins Pipeline (see [JENKINS-34998 Make CMake plugin compatible with pipeline](https://issues.jenkins-ci.org/browse/JENKINS-34998)).
 Its arguments try to match [CMake Build Configuration](https://wiki.jenkins-ci.org/display/JENKINS/CMake+Build+Configuration).
