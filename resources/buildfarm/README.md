@@ -33,6 +33,16 @@ docker run -d -p 49001:8080 -v $PWD/jenkins:/var/jenkins_home:z -t aseba/jenkins
 ```
 The log output will display the admin password that is generated. The server will be available at http://DOCKERHOST:49001. You can find the DOCKERHOST IP using `docker-machine ip` or `boot2docker ip`, depending on your Docker installation.
 
+## Docker image built using ansible-container
+As an alternative to the above, a minimal Docker image based on `ubuntu.yml` can be built using [ansible-container](http://docs.ansible.com/ansible-container/index.html). The specification is in the `ansible` directory. Build the image using:
+```
+ansible-container build
+```
+The image can be used by Jenkins Pipeline to spin up containers on demand. To run the container by hand, detached and listening for `ssh` connections on port 22022, use:
+```
+docker run -p22022:22 -d buildfarm-ci-ubuntu
+```
+
 ## Creating an Aseba project in Jenkins
 1. Use Manage Jenkins to add a Pipeline Global Library. Check ‘load implicitly’. Choose ‘Legacy SCM’ with ‘git’, and specify the master branch of https://github.com/davidjsherman/aseba-jenkins.git.
 2. Use Credentials to add a GitHub API key. Choose *Username with password*, using the generated API key as the password.

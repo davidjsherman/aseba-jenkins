@@ -1,0 +1,47 @@
+# This should be your Ansible playbooks to provision your containers.
+# An inventory will be automatically created using the names of the services
+# from your container.yml file.
+# Add any roles or other modules you'll need to this directory too.
+# For many examples of roles, check out Ansible Galaxy: https://galaxy.ansible.com/
+#
+---
+- hosts: ci-ubuntu
+  gather_facts: false
+  tasks:
+    - raw: which python || apt-get update
+    - raw: (which python && which aptitude) || apt-get install -y python python-apt aptitude
+
+    - name: Install openssh-server
+      apt: name=openssh-server state=present
+    - name: Create /var/run/sshd
+      file: path=/var/run/sshd state=directory owner=root group=root mode=0755
+    - name: Update sshd_config
+      replace: dest=/etc/ssh/sshd_config regexp='^PermitRootLogin without-password' replace='PermitRootLogin yes'
+    - name: Update pam settings
+      replace: dest=/etc/pam.d/sshd regexp='session\s*required\s*pam_loginuid.so' replace='session optional pam_loginuid.so'
+
+    - name: Make sure we have a 'wheel' group
+      group:
+        name: wheel
+        state: present
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+    - name: Add ci user, in wheel group
+      user:
+        name: ci
+        password: $6$3YZTcbyE$SY.jHW/9eVnj/G.TnzyOfiJqAXQ6px4AumuT1NQz4a1nJ5e7l5VPU9aziOI41Ju8ik3JgXostxMD3qokaCUr/.
+        shell: /bin/bash
+      register: ci
+
+    - name: Make sure en_EN is available
+      apt: pkg=language-pack-en state=installed update_cache=true
+
+    - name: Set up JRE
+      apt: pkg=openjdk-7-jre-headless state=installed update_cache=true
+      
+- include: ../ubuntu.yml

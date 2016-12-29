@@ -1,0 +1,11 @@
+galaxy_info:
+  author: David James Sherman
+  description: Jenkins agent for compiling Aseba
+  company: Inria (www.inria.fr)
+
+  license: GPLv3
+
+  min_ansible_container_version: 0.2.0
+
+  tags:
+    - aseba

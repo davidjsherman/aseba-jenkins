@@ -1,0 +1,9 @@
+version: "2"
+services:
+  ci-ubuntu:
+    image: ubuntu:trusty
+    ports:
+      - "22"
+    command: ["/usr/sbin/sshd", "-D"]
+
+registries: {}
