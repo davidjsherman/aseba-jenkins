@@ -31,12 +31,12 @@
         regexp: '^%wheel'
         line: '%wheel ALL=(ALL) NOPASSWD: ALL'
         validate: 'visudo -cf %s'
-    - name: Add ci user, in wheel group
+    - name: Add jenkins user, in wheel group
       user:
-        name: ci
-        password: $6$3YZTcbyE$SY.jHW/9eVnj/G.TnzyOfiJqAXQ6px4AumuT1NQz4a1nJ5e7l5VPU9aziOI41Ju8ik3JgXostxMD3qokaCUr/.
+        name: jenkins
+        password: $6$xKzJn9JL$Nrhjlw8OeGDcbr2clAttX4o3NDwjVk7C1Av3S8xSSeg8rE9rOiypF5w1rmiz5kjU6k7GY4gqkO8ZpsvujjRDk0
         shell: /bin/bash
-      register: ci
+      register: jenkins
 
     - name: Make sure en_EN is available
       apt: pkg=language-pack-en state=installed update_cache=true
