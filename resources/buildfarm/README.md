@@ -8,14 +8,18 @@ This Playbook will install development environments for Ubuntu, macOS, and Windo
 ### Invocation
 The playbook can be invoked using
 ```
-ansible-playbook -i hosts -s site.yml
+ansible-playbook -i hosts --ask-sudo-pass -s site.yml
 ```
 Alternatively, any OS-specific playbook may be invoked separately.
 
 ### Preparing nodes
 Ubuntu and macOS nodes must allow *ssh* access and the user must be authorized to use *sudo*. macOS nodes must already have Xcode Command Line Tools installed.
 
-Windows nodes must have Powershell >= 3.0 and must allow *Powershell Remoting*. The appropriate user and connection parameters must be set in `group_vars/ci-windows.yml`.
+Windows nodes must have Powershell >= 3.0 and must allow *Powershell Remoting*. The appropriate user and connection parameters must be set in `group_vars/ci-windows.yml`. If you cannot activate Powershell Remoting, you can clone this repository on the Windows machine and set up the environment with
+```
+powershell.exe -executionpolicy bypass -File windows_msys2.ps1
+```
+followed by the rest of the `windows.yml` playbook.
 
 ## Docker image
 Jenkins provides an [official Docker image](https://hub.docker.com/_/jenkins/) that runs a continuous integration and delivery server. The Dockerfile in `docker/` customizes this image to:
