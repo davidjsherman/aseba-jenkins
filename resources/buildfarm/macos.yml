@@ -11,6 +11,7 @@
       - valgrind
       - cmake
       - node
+      - hardlink-osx
 
   tasks:
     - name: Check for Homebrew
