@@ -5,8 +5,8 @@
 - hosts: ci-macos
   vars:
     brew_packages:
-      - qt
-      - qwt
+      - cartr/qt4/qt@4
+      - cartr/qt4/qwt-qt4
       - zzuf
       - valgrind
       - cmake
@@ -19,16 +19,21 @@
       register: brew_installed
 
     - name: Install Homebrew
-      shell: ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+      become_user: ci
+      shell: |
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        brew tap cartr/qt4
       when: brew_installed.stat.exists == false
 
     - name: Check for installed packages
+      become_user: ci
       shell: brew list | grep {{ item }}
       register: packages_installed
       with_items: "{{ brew_packages }}"
       ignore_errors: true
 
     - name: Install packages with Homebrew
+      become_user: ci
       shell: brew install {{ item }}
       with_items: "{{ brew_packages }}"
       when: "{{ item not in packages_installed.results|map(attribute='stdout') }}"
