@@ -21,6 +21,8 @@ powershell.exe -executionpolicy bypass -File windows_msys2.ps1
 ```
 followed by the rest of the `windows.yml` playbook.
 
+On Windows it is still necessary to manually install the [Bonjour SDK for Windows](https://developer.apple.com/download/more/?=Bonjour%20SDK%20for%20Windows), because it requires an Apple Developer ID!
+
 ## Docker image
 Jenkins provides an [official Docker image](https://hub.docker.com/_/jenkins/) that runs a continuous integration and delivery server. The Dockerfile in `docker/` customizes this image to:
 * Add packages dependencies needed to compile Aseba.
