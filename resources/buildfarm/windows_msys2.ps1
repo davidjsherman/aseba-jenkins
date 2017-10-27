@@ -53,10 +53,10 @@ function Install-Msys2 {
         Write-Verbose "Rebasing MSYS2"
         &$msyspath\autorebase.bat
 
-        # # Let's install python
-        # Write-Verbose "Installing python from chocolatey"
-        # choco install -y python2
-        # &$msyspath\usr\bin\sh -lc 'ln -s $(which python) /usr/bin/python'
+        # Let's install python
+        Write-Verbose "Installing python from chocolatey"
+        choco install -y python2
+        &$msyspath\usr\bin\sh -lc 'ln -s $(which python2) /usr/bin/python'
     }
 
     # Start doing the ssh-configuration dance

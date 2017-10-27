@@ -2,10 +2,13 @@
 127.0.0.1
 
 [ci-ubuntu]
-inirobot-ubuntu.ci
+inirobot-prod-ubuntu.ci
 
 [ci-macos]
-inirobot-macos.ci
+inirobot-prod-macos.ci
 
 [ci-windows]
-127.0.0.1
+localhost
+
+[ci-windows-ssh]
+inirobot-prod-windows.ci

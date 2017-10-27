@@ -1,7 +1,7 @@
 # Playbook for Windows hosts
 # Install MSYS2 then install packages using pacman
 
-- hosts: ci-windows
+- hosts: ci-windows ci-windows-ssh
   tasks:
     - name: Install MSYS2
       script: windows_msys2.ps1 # includes git and make
