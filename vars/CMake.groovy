@@ -57,7 +57,14 @@ set
 	'''.stripIndent()
 	
 	withEnv(envs) {
-		sh script
+		if (isUnix()) {
+			sh script
+		} else {
+			script = '$__body__ = @"' + "\n" + script + '"@' + "\n"
+			script += '$__wrap__ = \'C:/msys32/usr/bin/bash.exe -l -c "\' + $__body__ + \'"\'' + "\n"
+			script += 'invoke-expression $__wrap__'
+			powershell script
+		}
 	}
 }
 
