@@ -6,58 +6,91 @@
 
 def call(body) {
 	
-	workDir = pwd()
-	
-	cleanBuild = body.cleanBuild ?: true
-	buildDir = body.buildDir ?: workDir + '/build'
-	sourceDir = body.sourceDir ?: workDir
-	
-	envs = (body.envs instanceof ArrayList ? body.envs : [])
-	println(body.envs.getClass())
-	println(body.envs)
-	envs << "getCmakeArgs=" + (body.getCmakeArgs instanceof ArrayList ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
-	envs << "getArguments=" + (body.getArguments instanceof ArrayList ? body.getArguments.join(' ') : (body.getArguments ?: ''))
-	envs << "buildDir=" + buildDir + (body.label ? '/'+body.label : '')
-	envs << "sourceDir=" + sourceDir
-	envs << "buildType=" + (body.buildType ?: 'Debug')
-	envs << "installDir=" + (body.installDir ?: workDir + '/dist') + (body.label ? '/'+body.label : '')
-	envs << "getGenerator=" + (body.getGenerator ?: 'Unix Makefiles')
-	envs << "makeInvocation=" + (body.makeInvocation ?: 'make')
-	envs << "makeInstallInvocation=" + (body.makeInstallInvocation ?: 'make install')
-	envs << "workDir=" + (workDir)
-	
-	preloadScript = (body.preloadScript instanceof ArrayList ? body.preloadScript.join(" ") : body.preloadScript) ?: ''
-	
-	script = new String('''#!/bin/bash -l
-	echo -e run CMake with parameters: "\\n"workDir = ${workDir}"\\n"getArguments = ${getArguments}"\\n"buildDir = ${buildDir}"\\n"installDir = ${installDir}"\\n"sourceDir = ${sourceDir}"\\n"getGenerator = ${getGenerator}"\\n"preloadScript = ${preloadScript}"\\n"buildType = ${buildType}"\\n"getCmakeArgs = ${getCmakeArgs}
-set
-'''.stripIndent())
-	
+	def workDir = "${pwd()}"
+
+	// Standardize directory layout
+	def buildDir = (body.buildDir ?: workDir + '/build') + (body.label ? '/' + body.label : '')
+	def sourceDir = (body.sourceDir ? workDir + '/' + body.sourceDir : workDir)
+	def installDir = (body.installDir ?: workDir + '/dist') + (body.label ? '/'+body.label : '')
+
+	// Default values
+	def cleanBuild = body.cleanBuild ?: true
+	def buildType = (body.buildType ?: 'Debug')
+	def getGenerator = (body.getGenerator ?: 'Unix Makefiles')
+	def makeInvocation = (body.makeInvocation ?: 'make')
+	def makeInstallInvocation = (body.makeInstallInvocation ?: 'make install')
+
+	// Sanitize arguments
+	def envs = (body.envs instanceof ArrayList ? body.envs : [])
+	def getCmakeArgs = (body.getCmakeArgs instanceof ArrayList ? body.getCmakeArgs.join(' ') : (body.getCmakeArgs ?: ''))
+	def getArguments = (body.getArguments instanceof ArrayList ? body.getArguments.join(' ') : (body.getArguments ?: ''))
+	def preloadScript = (body.preloadScript instanceof ArrayList ? body.preloadScript.join(' ') : body.preloadScript) ?: ''
+
+	// Bash script to be built
+	def script = new String("#!/bin/bash -l")
+
+	// Record arguments in script comments
+	// Note that variables are interpolated due to """, single quotes are copied as-is to the script
+	script += """
+		# CMake.groovy arguments:
+		# workDir='${workDir}'
+		# buildDir='${buildDir}'
+		# installDir='${installDir}'
+		# sourceDir='${sourceDir}'
+		# getArguments='${getArguments}'
+		# getGenerator='${getGenerator}'
+		# preloadScript='${preloadScript}'
+		# buildType='${buildType}'
+		# getCmakeArgs='${getCmakeArgs}'
+	""".stripIndent()
+
+	// Clean out build directory unless specified otherwise
 	if (cleanBuild && buildDir != sourceDir) {
-		script += "rm -rf \"$buildDir\"\n"
+		script += """
+			pwd
+			rm -rf '$buildDir'
+		""".stripIndent()
 	}
-	
-	script += '''
-	mkdir -p "$installDir" "$buildDir"
-	cd "$buildDir"
-	'''.stripIndent()
-	
+
+	// Initialize directory layout if necessary
+	script += """
+		mkdir -p '$installDir' '$buildDir'
+	""".stripIndent()
+
+	// Optional preload script. Run in work directory
 	if (body.preloadScript) {
 		script += preloadScript + "\n"
 	}
-	
-	script += '''
-	cmake "$sourceDir" -G "$getGenerator" $getArguments \
-		-DCMAKE_INSTALL_PREFIX:PATH="$installDir" \
-		-DCMAKE_FIND_ROOT_PATH:PATH="$installDir" \
-		-DCMAKE_BUILD_TYPE:STRING="$buildType" \
-		$getCmakeArgs
-	$makeInvocation
-	$makeInstallInvocation
-	'''.stripIndent()
-	
-	withEnv(envs) {
-		sh script
+
+	// Main event: cmake, make, make install. Run in build directory
+	script += """
+		cd '$buildDir'
+		cmake '$sourceDir' -G '$getGenerator' $getArguments \
+			-DCMAKE_INSTALL_PREFIX:PATH='$installDir' \
+			-DCMAKE_FIND_ROOT_PATH:PATH='$installDir' \
+			-DCMAKE_BUILD_TYPE:STRING='$buildType' \
+			$getCmakeArgs
+		$makeInvocation
+		$makeInstallInvocation
+	""".stripIndent()
+
+	// Actually run the prepared script
+	if (isUnix()) {
+		withEnv(envs) {
+			// Dump script to log files
+			println( "==== CMake.groovy script for ${body.label}: ====\n${script}==============================\n" )
+			sh script
+		}
+	} else {
+		withEnv(envs) {
+			// Black magic to use Powershell to run a Bash script in the Mingw32 environment
+			script = '$cmakeScriptBody = @"' + "\n" + script + '"@' + "\n\n"
+			script += '$cmakeScriptInvoke = \'C:/msys32/usr/bin/bash.exe -l -c @"\n\' + $cmakeScriptBody + \'\n"@\'' + "\n"
+			script += 'invoke-expression $cmakeScriptInvoke' + "\n"
+			// Dump script to log files
+			println( "==== CMake.groovy script for ${body.label}: ====\n${script}==============================\n" )
+			powershell script
+		}
 	}
 }
 
