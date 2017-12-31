@@ -6,6 +6,7 @@
   vars:
     brew_packages:
       - cartr/qt4/qt@4
+      - cartr/qt4/qt-webkit@2.3
       - cartr/qt4/qwt-qt4
       - zzuf
       - valgrind
@@ -15,6 +16,7 @@
 
   tasks:
     - name: Check for Homebrew
+      become_user: ci
       stat: path=/usr/local/bin/brew
       register: brew_installed
 
@@ -25,9 +27,19 @@
         brew tap cartr/qt4
       when: brew_installed.stat.exists == false
 
+    - name: Check for Homebrew tap cartr/qt4
+      become_user: ci
+      shell: brew tap | grep cartr/qt4
+      register: brew_tap_installed
+
+    - name: Install Homebrew tap cartr/qt4
+      become_user: ci
+      shell: brew tap cartr/qt4
+      when: brew_tap_installed.rc != 0
+
     - name: Check for installed packages
       become_user: ci
-      shell: brew list | grep {{ item }}
+      shell: brew list --full-name | grep {{ item }}
       register: packages_installed
       with_items: "{{ brew_packages }}"
       ignore_errors: true
@@ -36,4 +48,4 @@
       become_user: ci
       shell: brew install {{ item }}
       with_items: "{{ brew_packages }}"
-      when: "{{ item not in packages_installed.results|map(attribute='stdout') }}"
+      when: item not in packages_installed.results|map(attribute='stdout')
