@@ -5,7 +5,7 @@
 - hosts: ci-macos
   vars:
     brew_packages:
-      - cartr/qt4/qt@4
+      - cartr/qt4/qt@4 --with-dbus
       - cartr/qt4/qt-webkit@2.3
       - cartr/qt4/qwt-qt4
       - zzuf
@@ -39,7 +39,7 @@
 
     - name: Check for installed packages
       become_user: ci
-      shell: brew list --full-name | grep {{ item }}
+      shell: brew list --full-name | grep {{ item.split()[0] }}
       register: packages_installed
       with_items: "{{ brew_packages }}"
       ignore_errors: true
@@ -48,4 +48,4 @@
       become_user: ci
       shell: brew install {{ item }}
       with_items: "{{ brew_packages }}"
-      when: item not in packages_installed.results|map(attribute='stdout')
+      when: item.split()[0] not in packages_installed.results|map(attribute='stdout')
