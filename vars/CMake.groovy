@@ -9,9 +9,9 @@ def call(body) {
 	def workDir = "${pwd()}"
 
 	// Standardize directory layout
-	def buildDir = (body.buildDir ?: workDir + '/build') + (body.label ? '/' + body.label : '')
+	def buildDir = (body.buildDir ?: workDir + '/build' + (body.label ? '/' + body.label : ''))
 	def sourceDir = (body.sourceDir ? workDir + '/' + body.sourceDir : workDir)
-	def installDir = (body.installDir ?: workDir + '/dist') + (body.label ? '/'+body.label : '')
+	def installDir = (body.installDir ?: workDir + '/dist' + (body.label ? '/'+body.label : ''))
 
 	// Default values
 	def cleanBuild = body.cleanBuild ?: true
