@@ -10,7 +10,7 @@ def call(body) {
 
 	// Standardize directory layout
 	def buildDir = (body.buildDir ?: workDir + '/build' + (body.label ? '/' + body.label : ''))
-	def sourceDir = (body.sourceDir ? workDir + '/' + body.sourceDir : workDir)
+	def sourceDir = (body.sourceDir ? ((body.sourceDir.indexOf(workDir) == 0 ? '' : workDir + '/') + body.sourceDir) : workDir)
 	def installDir = (body.installDir ?: workDir + '/dist' + (body.label ? '/'+body.label : ''))
 
 	// Default values
