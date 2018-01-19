@@ -13,6 +13,9 @@
         - gcc
         - git
         - libboost-python-dev
+        - libqt5svg5-dev
+        - libqt5webkit5-dev
+        - libqt5x11extras5-dev
         - libqwt5-qt4
         - libqwt5-qt4-dev
         - libqwt-qt5-dev
@@ -23,6 +26,9 @@
         - qt5-qmake
         - qtbase5-dev
         - qtbase5-dev-tools
+        - qtmultimedia5-dev
+        - qttools5-dev
+        - qttools5-dev-tools
         - valgrind
 
     - name: Update all packages to the latest version
