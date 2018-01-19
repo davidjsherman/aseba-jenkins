@@ -2,3 +2,4 @@
 - include: ubuntu.yml
 - include: macos.yml
 - include: windows.yml
+- include: windows-qt5.yml

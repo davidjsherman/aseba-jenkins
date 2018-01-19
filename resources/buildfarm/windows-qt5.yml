@@ -1,10 +1,10 @@
 # Playbook for Windows hosts
 # Install MSYS2 then install packages using pacman
 
-- hosts: ci-windows ci-windows-ssh
+- hosts: ci-windows-qt5
   tasks:
     - name: Install MSYS2
       script: windows_msys2.ps1 # includes git and make
 
     - name: Install toolchain
-      shell: pacman -S --noconfirm mingw-w64-i686-toolchain mingw-w64-i686-cmake mingw-w64-i686-qt4 mingw-w64-i686-qwt-qt4
+      shell: pacman -S --noconfirm mingw-w64-i686-toolchain mingw-w64-i686-cmake mingw-w64-i686-qt5 mingw-w64-i686-qwt-qt5

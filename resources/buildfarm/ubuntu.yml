@@ -6,20 +6,24 @@
     - name: Install dependencies
       apt: pkg={{item}} state=installed update_cache=true
       with_items:
-        - git
+        - build-essential
         - cmake
-        - gcc
+        - devscripts
         - g++
-        - qt4-dev-tools
+        - gcc
+        - git
+        - libboost-python-dev
         - libqwt5-qt4
         - libqwt5-qt4-dev
+        - libqwt-qt5-dev
         - libudev-dev
-        - valgrind
-        - devscripts
-        - build-essential
         - lintian
-        - libboost-python-dev
         - nodejs
+        - qt4-dev-tools
+        - qt5-qmake
+        - qtbase5-dev
+        - qtbase5-dev-tools
+        - valgrind
 
     - name: Update all packages to the latest version
       apt:

@@ -8,7 +8,10 @@ inirobot-prod-ubuntu.ci
 inirobot-prod-macos.ci
 
 [ci-windows]
-localhost
+inirobot-prod-windows.ci
+
+[ci-windows-qt5]
+inirobot-prod-windows-qt5.ci
 
 [ci-windows-ssh]
-inirobot-prod-windows.ci
+

@@ -8,11 +8,13 @@
       - cartr/qt4/qt@4 --with-dbus
       - cartr/qt4/qt-webkit@2.3
       - cartr/qt4/qwt-qt4
-      - zzuf
-      - valgrind
+      - hardlink-osx
       - cmake
       - node
-      - hardlink-osx
+      - qt
+      - qwt
+      - valgrind
+      - zzuf
 
   tasks:
     - name: Check for Homebrew
@@ -31,6 +33,7 @@
       become_user: ci
       shell: brew tap | grep cartr/qt4
       register: brew_tap_installed
+      ignore_errors: true
 
     - name: Install Homebrew tap cartr/qt4
       become_user: ci
